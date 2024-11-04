@@ -1,34 +1,20 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Inter, Roboto_Serif, Roboto_Mono } from 'next/font/google'
+import { Inter } from 'next/font/google'
+import * as fontLoaders from './lib/fontLoaders'
 import { categorizedFonts } from './components/googleFonts'
 import FontSwitcher from './components/FontSwitcher'
 
-
 const inter = Inter({ subsets: ['latin'] })
-const robotoSerif = Roboto_Serif({ subsets: ['latin'] })
-const robotoMono = Roboto_Mono({ subsets: ['latin'] })
 
 export default function Home() {
-  const fontMap = {
-    'sans-serif': inter,
-    serif: robotoSerif,
-    monospace: robotoMono,
-  }
-
   const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('sans-serif')
-
   const [selectedFont, setSelectedFont] = useState('')
 
   useEffect(() => {
-    const availableCategories = Object.keys(categorizedFonts).filter(
-      (category) => fontMap[category]
-    )
-    setCategories(availableCategories)
-    if (availableCategories.length > 0) {
-      setSelectedCategory(availableCategories[0])
-    }
+    setCategories(Object.keys(categorizedFonts))
+    setSelectedCategory('sans-serif')
   }, [])
 
   useEffect(() => {
@@ -36,6 +22,8 @@ export default function Home() {
       setSelectedFont(categorizedFonts[selectedCategory][0])
     }
   }, [selectedCategory])
+
+  const currentFont = fontLoaders[`${selectedFont.replace(/\s+/g, '_')}Font`] || inter
 
   return (
     <div>
@@ -55,13 +43,8 @@ export default function Home() {
         selectedFont={selectedFont}
         onFontChange={setSelectedFont}
       />
-      
-      <p
-        className={
-          fontMap[selectedCategory]?.className ||
-          fontMap['sans-serif'].className
-        }
-      >
+
+      <p className={currentFont.className}>
         This is a sample paragraph to demonstrate the font changes.
       </p>
     </div>
