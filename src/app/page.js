@@ -1,4 +1,5 @@
 'use client'
+import styles from './css/page.module.css'
 import { useState } from 'react'
 import Head from 'next/head'
 import {
@@ -18,14 +19,19 @@ import {
 import { ChevronDownIcon } from '@heroicons/react/16/solid'
 
 const inter = Inter({ subsets: ['latin'] })
-  const lato = Lato({subsets: ['latin'], weight: ['100', '300', '400', '700', '900']})
-  const robotoSerif = Roboto_Serif({ subsets: ['latin']})
-  const merriweather = Merriweather({subsets: ['latin'], weight: ['300', '400', '700', '900']})
-  const robotoMono = Roboto_Mono({ subsets: ['latin']})
-  const sourceCodePro = Source_Code_Pro({ subsets: ['latin']})
+const lato = Lato({
+  subsets: ['latin'],
+  weight: ['100', '300', '400', '700', '900'],
+})
+const robotoSerif = Roboto_Serif({ subsets: ['latin'] })
+const merriweather = Merriweather({
+  subsets: ['latin'],
+  weight: ['300', '400', '700', '900'],
+})
+const robotoMono = Roboto_Mono({ subsets: ['latin'] })
+const sourceCodePro = Source_Code_Pro({ subsets: ['latin'] })
 
 export default function Home() {
-  
   const [headingFont, setHeadingFont] = useState('sans')
   const [bodyFont, setBodyFont] = useState('sans')
 
@@ -63,7 +69,7 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <div className={styles.wrapper}>
       <Head>
         <title>A design conference for the dark side.</title>
         <meta name='description' content='Test different fonts in context' />
@@ -71,42 +77,31 @@ export default function Home() {
       </Head>
 
       <main>
-        <Dropdown>
-          <DropdownButton outline>
-            Heading Font:{' '}
-            {headingFont.charAt(0).toUpperCase() + headingFont.slice(1)}
-            <ChevronDownIcon />
-          </DropdownButton>
-          <DropdownMenu>
-            <DropdownItem onClick={() => setHeadingFont('sans')}>
-              Sans-serif
-            </DropdownItem>
-            <DropdownItem onClick={() => setHeadingFont('serif')}>
-              Serif
-            </DropdownItem>
-            <DropdownItem onClick={() => setHeadingFont('mono')}>
-              Monospace
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+      <div className={styles.fontTypeSelector}>
+  <Dropdown>
+    <DropdownButton outline>
+      Heading Font: {headingFont.charAt(0).toUpperCase() + headingFont.slice(1)}
+      <ChevronDownIcon />
+    </DropdownButton>
+    <DropdownMenu>
+      <DropdownItem onClick={() => setHeadingFont('sans')}>Sans-serif</DropdownItem>
+      <DropdownItem onClick={() => setHeadingFont('serif')}>Serif</DropdownItem>
+      <DropdownItem onClick={() => setHeadingFont('mono')}>Monospace</DropdownItem>
+    </DropdownMenu>
+  </Dropdown>
 
-        <Dropdown>
-          <DropdownButton outline>
-            Body: {bodyFont.charAt(0).toUpperCase() + bodyFont.slice(1)}
-            <ChevronDownIcon />
-          </DropdownButton>
-          <DropdownMenu>
-            <DropdownItem onClick={() => setBodyFont('sans')}>
-              Sans-serif
-            </DropdownItem>
-            <DropdownItem onClick={() => setBodyFont('serif')}>
-              Serif
-            </DropdownItem>
-            <DropdownItem onClick={() => setBodyFont('mono')}>
-              Monospace
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+  <Dropdown>
+    <DropdownButton outline>
+      Body Font: {bodyFont.charAt(0).toUpperCase() + bodyFont.slice(1)}
+      <ChevronDownIcon />
+    </DropdownButton>
+    <DropdownMenu>
+      <DropdownItem onClick={() => setBodyFont('sans')}>Sans-serif</DropdownItem>
+      <DropdownItem onClick={() => setBodyFont('serif')}>Serif</DropdownItem>
+      <DropdownItem onClick={() => setBodyFont('mono')}>Monospace</DropdownItem>
+    </DropdownMenu>
+  </Dropdown>
+</div>
 
         <FontSelector
           fontType={headingFont}
@@ -120,11 +115,8 @@ export default function Home() {
           setFontIndex={setBodyFontIndex}
         />
 
-        <div style={{ padding: '20px' }}>
-          <h1
-            className={
-              fonts[fontsByType[headingFont][headingFontIndex]].className
-            }
+        <div className={styles.body}>
+          <h1 className={fonts[fontsByType[headingFont][headingFontIndex]].className}
             style={{ fontSize: '2.5em' }}
           >
             A design conference for the dark side.

@@ -1,0 +1,19 @@
+.fontTypeSelector {
+  display: flex;
+  flex-direction: row;
+  color: red;
+}
+
+.wrapper {
+  margin: 0 auto;
+  width: 60%;
+  display: flex;
+  left: auto;
+  right: auto;
+ 
+}
+
+
+.body {
+  margin-top: 20%;
+}
