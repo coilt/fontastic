@@ -1,101 +1,144 @@
-import Image from "next/image";
+'use client'
+import { useState } from 'react'
+import Head from 'next/head'
+import {
+  Inter,
+  Roboto_Serif,
+  Roboto_Mono,
+  Lato,
+  Merriweather,
+  Source_Code_Pro,
+} from 'next/font/google'
+import {
+  Dropdown,
+  DropdownButton,
+  DropdownItem,
+  DropdownMenu,
+} from './components/dropdown'
+import { ChevronDownIcon } from '@heroicons/react/16/solid'
+
+const inter = Inter({ subsets: ['latin'] })
+  const lato = Lato({subsets: ['latin'], weight: ['100', '300', '400', '700', '900']})
+  const robotoSerif = Roboto_Serif({ subsets: ['latin']})
+  const merriweather = Merriweather({subsets: ['latin'], weight: ['300', '400', '700', '900']})
+  const robotoMono = Roboto_Mono({ subsets: ['latin']})
+  const sourceCodePro = Source_Code_Pro({ subsets: ['latin']})
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  
+  const [headingFont, setHeadingFont] = useState('sans')
+  const [bodyFont, setBodyFont] = useState('sans')
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const fonts = {
+    inter: inter,
+    lato: lato,
+    robotoSerif: robotoSerif,
+    merriweather: merriweather,
+    robotoMono: robotoMono,
+    sourceCodePro: sourceCodePro,
+  }
+
+  const fontsByType = {
+    sans: ['inter', 'lato'],
+    serif: ['robotoSerif', 'merriweather'],
+    mono: ['robotoMono', 'sourceCodePro'],
+  }
+  const [headingFontIndex, setHeadingFontIndex] = useState(0)
+  const [bodyFontIndex, setBodyFontIndex] = useState(0)
+
+  function FontSelector({ fontType, fontIndex, setFontIndex }) {
+    const fonts = fontsByType[fontType]
+
+    const handlePrev = () =>
+      setFontIndex((fontIndex - 1 + fonts.length) % fonts.length)
+    const handleNext = () => setFontIndex((fontIndex + 1) % fonts.length)
+
+    return (
+      <div className='font-selector'>
+        <button onClick={handlePrev}>&lt;</button>
+        <span>{fonts[fontIndex].split(/(?=[A-Z])/).join(' ')}</span>
+        <button onClick={handleNext}>&gt;</button>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <Head>
+        <title>A design conference for the dark side.</title>
+        <meta name='description' content='Test different fonts in context' />
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
+
+      <main>
+        <Dropdown>
+          <DropdownButton outline>
+            Heading Font:{' '}
+            {headingFont.charAt(0).toUpperCase() + headingFont.slice(1)}
+            <ChevronDownIcon />
+          </DropdownButton>
+          <DropdownMenu>
+            <DropdownItem onClick={() => setHeadingFont('sans')}>
+              Sans-serif
+            </DropdownItem>
+            <DropdownItem onClick={() => setHeadingFont('serif')}>
+              Serif
+            </DropdownItem>
+            <DropdownItem onClick={() => setHeadingFont('mono')}>
+              Monospace
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+
+        <Dropdown>
+          <DropdownButton outline>
+            Body: {bodyFont.charAt(0).toUpperCase() + bodyFont.slice(1)}
+            <ChevronDownIcon />
+          </DropdownButton>
+          <DropdownMenu>
+            <DropdownItem onClick={() => setBodyFont('sans')}>
+              Sans-serif
+            </DropdownItem>
+            <DropdownItem onClick={() => setBodyFont('serif')}>
+              Serif
+            </DropdownItem>
+            <DropdownItem onClick={() => setBodyFont('mono')}>
+              Monospace
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+
+        <FontSelector
+          fontType={headingFont}
+          fontIndex={headingFontIndex}
+          setFontIndex={setHeadingFontIndex}
+        />
+
+        <FontSelector
+          fontType={bodyFont}
+          fontIndex={bodyFontIndex}
+          setFontIndex={setBodyFontIndex}
+        />
+
+        <div style={{ padding: '20px' }}>
+          <h1
+            className={
+              fonts[fontsByType[headingFont][headingFontIndex]].className
+            }
+            style={{ fontSize: '2.5em' }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            A design conference for the dark side.
+          </h1>
+          <p className={fonts[fontsByType[bodyFont][bodyFontIndex]].className}>
+            The next generation of web users are tech-savvy and suspicious. They
+            know how to use dev tools, they can detect a phishing scam from a
+            mile away, and they certainly aren't accepting any checks from
+            Western Union. At DeceptiConf you'll learn about the latest dark
+            patterns being developed to trick even the smartest visitors, and
+            you'll learn how to deploy them without ever being detected.
+          </p>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
-  );
+  )
 }
