@@ -1,0 +1,121 @@
+'use client'
+import styles from './css/page.module.css'
+import { useState, useEffect } from 'react';
+import Head from 'next/head'
+import { categorizedFonts } from './components/googleFonts';
+ 
+import {
+  Inter,
+  Roboto_Serif,
+  Roboto_Mono,
+  Lato,
+  Merriweather,
+  Source_Code_Pro,
+} from 'next/font/google'
+import {
+  Dropdown,
+  DropdownButton,
+  DropdownItem,
+  DropdownMenu,
+} from './components/dropdown'
+import { ChevronDownIcon } from '@heroicons/react/16/solid'
+
+const inter = Inter({ subsets: ['latin'] })
+const lato = Lato({
+  subsets: ['latin'],
+  weight: ['100', '300', '400', '700', '900'],
+})
+const robotoSerif = Roboto_Serif({ subsets: ['latin'] })
+const merriweather = Merriweather({
+  subsets: ['latin'],
+  weight: ['300', '400', '700', '900'],
+})
+const robotoMono = Roboto_Mono({ subsets: ['latin'] })
+const sourceCodePro = Source_Code_Pro({ subsets: ['latin'] })
+
+export default function Home() {
+
+  const [fontCategories, setFontCategories] = useState([]);
+  const [headingFontCategory, setHeadingFontCategory] = useState('');
+  const [bodyFontCategory, setBodyFontCategory] = useState('');
+
+
+
+
+
+
+  const fonts = {
+    inter: inter,
+    lato: lato,
+    robotoSerif: robotoSerif,
+    merriweather: merriweather,
+    robotoMono: robotoMono,
+    sourceCodePro: sourceCodePro,
+  }
+
+  const fontsByType = {
+    sans: ['inter', 'lato'],
+    serif: ['robotoSerif', 'merriweather'],
+    mono: ['robotoMono', 'sourceCodePro'],
+  }
+  const [headingFontIndex, setHeadingFontIndex] = useState(0)
+  const [bodyFontIndex, setBodyFontIndex] = useState(0)
+
+
+  return (
+    <div className={styles.wrapper}>
+      <Head>
+        <title>A design conference for the dark side.</title>
+        <meta name='description' content='Test different fonts in context' />
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
+
+      <main>
+        <div className={styles.fontTypeSelector}>
+          <div>
+          <Dropdown>
+  <DropdownButton outline>
+    Heading Font: {headingFontCategory}
+    <ChevronDownIcon />
+  </DropdownButton>
+  <DropdownMenu>
+    {Object.keys(categorizedFonts).map(category => (
+      <DropdownItem key={category} onClick={() => setHeadingFontCategory(category)}>
+        {category}
+      </DropdownItem>
+    ))}
+  </DropdownMenu>
+</Dropdown>
+
+        
+          </div>
+
+          <div>
+             
+
+        
+          </div>
+        </div>
+
+        <div className={styles.body}>
+        <h1
+  className={fonts[fontsByType[headingFontCategory][headingFontIndex]].className}
+  style={{ fontSize: '2.5em' }}
+>
+            A design conference for the dark side
+          </h1>
+          <p className={fonts[fontsByType[bodyFont][bodyFontIndex]].className}>
+            The next generation of web users are tech-savvy and suspicious. They
+            know how to use dev tools, they can detect a phishing scam from a
+            mile away, and they certainly aren't accepting any checks from
+            Western Union. At DeceptiConf you'll learn about the latest dark
+            patterns being developed to trick even the smartest visitors, and
+            you'll learn how to deploy them without ever being detected.
+          </p>
+        </div>
+
+        
+      </main>
+    </div>
+  )
+}

@@ -1,7 +1,7 @@
 .fontTypeSelector {
   display: flex;
   flex-direction: row;
-  color: red;
+  
 }
 
 .wrapper {
@@ -10,10 +10,12 @@
   display: flex;
   left: auto;
   right: auto;
- 
 }
-
 
 .body {
   margin-top: 20%;
+}
+
+.headingPrimary {
+  margin-bottom: 1rem;
 }
