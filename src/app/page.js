@@ -1,22 +1,20 @@
 'use client'
 import { useState, useEffect } from 'react'
 import localFont from 'next/font/local'
-import fontData from  './lib/fontData.json'
+import fontData from './fontData.json'
 import FontSwitcher from './components/FontSwitcher'
-
-const sansSerifFont = localFont({ src: './fonts/SANS_SERIF/Roboto-Regular.ttf' })
-const serifFont = localFont({ src: './fonts/SERIF/Merriweather-Regular.ttf' })
-const monoFont = localFont({ src: './fonts/MONOSPACE/RobotoMono-Regular.ttf' })
-
-const fontLoaders = {
-  'SANS_SERIF': sansSerifFont,
-  'SERIF': serifFont,
-  'MONOSPACE': monoFont,
-}
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('SANS_SERIF')
   const [selectedFont, setSelectedFont] = useState(null)
+  const [loadedFont, setLoadedFont] = useState(null)
+
+  useEffect(() => {
+    if (selectedFont) {
+      const font = localFont({ src: selectedFont.path })
+      setLoadedFont(font)
+    }
+  }, [selectedFont])
 
   const handleFontChange = (newFont) => {
     setSelectedFont(newFont)
@@ -36,9 +34,11 @@ export default function Home() {
         onFontChange={handleFontChange}
       />
 
-      <p className={fontLoaders[selectedCategory].className}>
-        This is a sample text in the selected font category.
-      </p>
+      {loadedFont && (
+        <p className={loadedFont.className}>
+          This is a sample text in the selected font.
+        </p>
+      )}
     </div>
   )
 }
