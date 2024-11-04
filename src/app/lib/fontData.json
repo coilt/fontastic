@@ -8079,26 +8079,6 @@
       "path": "public\\googlefonts\\ofl\\notocoloremoji"
     },
     {
-      "name": "notocoloremojicompattest",
-      "displayName": "Noto Color Emoji Compat Test",
-      "designer": "Google",
-      "copyright": "Copyright 2022 Google.",
-      "styles": [
-        "normal"
-      ],
-      "weights": [
-        400
-      ],
-      "files": {
-        "normal-400": "public\\googlefonts\\ofl\\notocoloremojicompattest\\NotoColorEmojiCompatTest-Regular.ttf"
-      },
-      "subsets": [
-        "emoji",
-        "menu"
-      ],
-      "path": "public\\googlefonts\\ofl\\notocoloremojicompattest"
-    },
-    {
       "name": "notoemoji",
       "displayName": "Noto Emoji",
       "designer": "Google",

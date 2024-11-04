@@ -7,22 +7,21 @@ const googleFontsPath = path.join(__dirname, 'public', 'googlefonts', 'ofl');
 
 async function generateFontData() {
   const fontData = {};
+  const noMetadataFonts = [];
 
   const fontDirs = await fs.readdir(googleFontsPath);
-  console.log(`Found ${fontDirs.length} font directories`);
 
   for (const fontDir of fontDirs) {
     const metadataPath = path.join(googleFontsPath, fontDir, 'METADATA.pb');
     const fontPath = path.relative(process.cwd(), path.join(googleFontsPath, fontDir));
     
     try {
+      await fs.access(metadataPath);
       const metadata = await fs.readFile(metadataPath, 'utf8');
       const category = extractCategory(metadata);
-      console.log(`Processing font: ${fontDir}, Category: ${category}`);
-
       const fontName = fontDir;
       const fontInfo = extractFontInfo(metadata, fontPath);
-      console.log(`Font info extracted: ${JSON.stringify(fontInfo, null, 2)}`);
+      
 
       if (!fontData[category]) {
         fontData[category] = [];
@@ -40,13 +39,14 @@ async function generateFontData() {
         path: fontPath
       });
 
-      console.log(`Added font ${fontName} to category ${category}`);
+      
     } catch (error) {
-      console.error(`Error processing ${fontDir}: ${error.message}`);
+      noMetadataFonts.push(fontDir);
+      console.error(`No metadata found for ${fontDir}`);
     }
   }
 
-  console.log(`Final fontData structure: ${JSON.stringify(fontData, null, 2)}`);
+  console.log('Fonts without metadata:', noMetadataFonts);
 
   await fs.writeFile('fontData.json', JSON.stringify(fontData, null, 2));
   console.log('fontData.json generated successfully');
