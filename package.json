@@ -8,8 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "install-fonts": "node ./src/app/installFonts",
-"generate-font-loaders": "node src/app/scripts/generateFontLoaders.js"
-
+"generate-font-loaders": "node src/app/scripts/generateFontLoaders.js",
+"generate-font-names": "node src/app/scripts/generateFontNames.js",
+"generate-font-data": "node ./generateFontData.js"
 
 
 

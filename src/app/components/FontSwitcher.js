@@ -1,16 +1,33 @@
 import React from 'react'
+import * as fontLoaders from '../lib/fontLoaders'
 
 export default function FontSwitcher({ fonts, selectedFont, onFontChange }) {
-  const currentIndex = fonts.indexOf(selectedFont)
+  const fontLoaderArray = Object.values(fontLoaders).filter(loader => loader && loader.style);
+  
+  const currentIndex = fontLoaderArray.findIndex(loader => 
+    loader.style.fontFamily.toLowerCase().includes(selectedFont.toLowerCase())
+  );
 
   const handlePrevious = () => {
-    const newIndex = (currentIndex - 1 + fonts.length) % fonts.length
-    onFontChange(fonts[newIndex])
+    console.log('Previous button clicked');
+    const newIndex = (currentIndex - 1 + fontLoaderArray.length) % fontLoaderArray.length;
+    const newFont = fontLoaderArray[newIndex];
+    if (newFont && newFont.style) {
+      const newFontName = newFont.style.fontFamily.split(',')[0].replace(/['"]+/g, '');
+      console.log('Switching to previous font:', newFontName);
+      onFontChange(newFontName);
+    }
   }
 
   const handleNext = () => {
-    const newIndex = (currentIndex + 1) % fonts.length
-    onFontChange(fonts[newIndex])
+    console.log('Next button clicked');
+    const newIndex = (currentIndex + 1) % fontLoaderArray.length;
+    const newFont = fontLoaderArray[newIndex];
+    if (newFont && newFont.style) {
+      const newFontName = newFont.style.fontFamily.split(',')[0].replace(/['"]+/g, '');
+      console.log('Switching to next font:', newFontName);
+      onFontChange(newFontName);
+    }
   }
 
   return (

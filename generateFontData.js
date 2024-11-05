@@ -1,9 +1,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-
 const googleFontsPath = path.join(__dirname, 'public', 'googlefonts', 'ofl');
-
 
 async function generateFontData() {
   const fontData = {};
@@ -14,14 +12,13 @@ async function generateFontData() {
   for (const fontDir of fontDirs) {
     const metadataPath = path.join(googleFontsPath, fontDir, 'METADATA.pb');
     const fontPath = path.relative(process.cwd(), path.join(googleFontsPath, fontDir));
-    
+
     try {
       await fs.access(metadataPath);
       const metadata = await fs.readFile(metadataPath, 'utf8');
       const category = extractCategory(metadata);
       const fontName = fontDir;
       const fontInfo = extractFontInfo(metadata, fontPath);
-      
 
       if (!fontData[category]) {
         fontData[category] = [];
@@ -39,7 +36,6 @@ async function generateFontData() {
         path: fontPath
       });
 
-      
     } catch (error) {
       noMetadataFonts.push(fontDir);
       console.error(`No metadata found for ${fontDir}`);

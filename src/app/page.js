@@ -1,52 +1,40 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { Inter } from 'next/font/google'
-import * as fontLoaders from './lib/fontLoaders'
-import { categorizedFonts } from './components/googleFonts'
-import FontSwitcher from './components/FontSwitcher'
 
-const inter = Inter({ subsets: ['latin'] })
+import React, { useState } from 'react';
+import fontLoaders from './lib/fontLoaders';
 
 export default function Home() {
-  const [categories, setCategories] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState('sans-serif')
-  const [selectedFont, setSelectedFont] = useState('')
+  const fontKeys = Object.keys(fontLoaders);
+  const [currentFontIndex, setCurrentFontIndex] = useState(0);
 
-  useEffect(() => {
-    setCategories(Object.keys(categorizedFonts))
-    setSelectedCategory('sans-serif')
-  }, [])
+  // Function to change font index
+  const changeFont = (direction) => {
+    setCurrentFontIndex((prevIndex) => {
+      if (direction === 'next') {
+        return (prevIndex + 1) % fontKeys.length;
+      } else if (direction === 'prev') {
+        return (prevIndex - 1 + fontKeys.length) % fontKeys.length;
+      }
+      return prevIndex;
+    });
+  };
 
-  useEffect(() => {
-    if (selectedCategory && categorizedFonts[selectedCategory].length > 0) {
-      setSelectedFont(categorizedFonts[selectedCategory][0])
-    }
-  }, [selectedCategory])
+  const currentFont = fontLoaders[fontKeys[currentFontIndex]];
 
-  const currentFont = fontLoaders[`${selectedFont.replace(/\s+/g, '_')}Font`] || inter
+  console.log('Current font object:', currentFont);
 
   return (
     <div>
-      <select
-        value={selectedCategory}
-        onChange={(e) => setSelectedCategory(e.target.value)}
+      <p
+        className={currentFont ? currentFont.className : ''}
+        style={{ fontFamily: currentFont ? currentFont.style.fontFamily : 'inherit' }}
       >
-        {categories.map((category) => (
-          <option key={category} value={category}>
-            {category}
-          </option>
-        ))}
-      </select>
-
-      <FontSwitcher
-        fonts={categorizedFonts[selectedCategory]}
-        selectedFont={selectedFont}
-        onFontChange={setSelectedFont}
-      />
-
-      <p className={currentFont.className}>
         This is a sample paragraph to demonstrate the font changes.
       </p>
+      <div>
+        <button onClick={() => changeFont('prev')}>← Previous Font</button>
+        <button onClick={() => changeFont('next')}>Next Font →</button>
+      </div>
     </div>
-  )
+  );
 }
